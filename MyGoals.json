@@ -1,0 +1,34 @@
+[
+    {
+        "University": {
+            "Main Work": [
+                "Create schemes",
+                "Calculate work"
+            ],
+            "Teacher Works": [
+                "Calculate stick",
+                "Pass jobs"
+            ]
+        }
+    },
+    {
+        "Exams on Master": {
+            "Mathematics": [
+                "School math",
+                "Universitymath",
+                "Dicrete math",
+                "Math logic"
+            ],
+            "Algorithmks": [
+                "Stepik course",
+                "Lections"
+            ],
+            "Operating system": [
+                "Book"
+            ],
+            "PC science": [
+                "Book"
+            ]
+        }
+    }
+]
