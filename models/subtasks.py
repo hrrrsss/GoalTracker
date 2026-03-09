@@ -3,4 +3,7 @@ class Subtask:
         self.name = name
 
     def __str__(self):
-        return f"Subtasks: {self.name}"
+        return f"Subtask: {self.name}"
+    
+    def __repr__(self):
+        return f"Subtask: {self.name}"

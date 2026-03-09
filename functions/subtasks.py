@@ -1,11 +1,11 @@
 from leksikon.leksikon import c_t
 
-def show_subtasks(subtasks):
+def show_subtasks(task):
     print()
     print("-"*50)
-    if subtasks:
-        for subtask in range(1, len(subtasks)+1):
-            print(f"{subtask}. {subtasks[subtask-1]}")
+    if task:
+        for subtask in range(1, len(task)+1):
+            print(f"{subtask}. {task[subtask-1]}")
         return True
     else:
         print("Subtasks are empty")
@@ -13,6 +13,10 @@ def show_subtasks(subtasks):
 
 def control_subtasks(task):
     while True:
-        show_subtasks(task.subtasks)
+        show_subtasks(task)
         print(c_t)
         choice = int(input("Choice a point: "))
+        if choice == 1:
+            ...
+        else:
+            break

@@ -2,12 +2,12 @@ from leksikon.leksikon import c_t
 from models.task import Task
 from .subtasks import control_subtasks
 
-def show_tasks(tasks: list):
+def show_tasks(goal):
     print()
     print("-"*50)
-    if tasks:
-        for task in range(1, len(tasks)+1):
-            print(f"{task}. {tasks[task-1]}")
+    if goal:
+        for task in range(1, len(goal)+1):
+            print(f"{task}. {goal[task-1]}")
         return True
     else:
         print("Tasks are empty")
@@ -23,7 +23,7 @@ def create_task(goal):
 
 def control_tasks(goal):
     while True:
-        show_tasks(goal.tasks)
+        show_tasks(goal)
         print(c_t)
         choice = int(input("Choice a point: "))
         if choice == 1:
