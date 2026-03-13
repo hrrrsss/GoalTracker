@@ -21,8 +21,18 @@ def create_task(goal):
     print("New task creates")
 
 
+def show_progress(goal):
+    
+    #Update data progress in tasks
+    for task in goal:
+        task.progress
+    
+    print(goal.progress)
+
+
 def control_tasks(goal):
     while True:
+        show_progress(goal)
         show_tasks(goal)
         print(c_t)
         choice = int(input("Choice a point: "))
@@ -36,4 +46,3 @@ def control_tasks(goal):
             del goal.tasks[choice_task]
         else:
             break
-        

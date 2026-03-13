@@ -1,19 +1,26 @@
 from models.goal import Goal
 from models.task import Task
-from models.subtasks import Subtask
+from models.subtask import Subtask
 
 
 def distribution_goals(obj_user_goal: dict):
+    "Distribution of Python objects into different classes"
+
     result = []
 
-    for goal in obj_user_goal:
-        for name_goal, user_tasks in goal.items():
-            added_goal = Goal(name_goal)
-            for name_task, user_subtasks in user_tasks.items():
-                added_task = Task(name_task)
-                added_goal.tasks.append(added_task)
-                for subtask in user_subtasks:
-                    added_task.subtasks.append(subtask)
-            result.append(added_goal)
+    if obj_user_goal:
+        for goal in obj_user_goal:
+                for goal_name, tasks in goal.items():
+                        goal_instance = Goal(goal_name)
+                        if goal[goal_name]:
+                            for task_name, subtasks in tasks.items():
+                                task_instance = Task(task_name)
+                                if tasks[task_name]:
+                                    for subtask_name, subtask_data in subtasks.items():
+                                        subtask_instance = Subtask(subtask_name)
+                                        subtask_instance.progress = subtask_data[0]
+                                    task_instance.subtasks.append(subtask_instance)
+                                goal_instance.tasks.append(task_instance)
+                        result.append(goal_instance)
 
     return result

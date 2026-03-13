@@ -1,33 +1,39 @@
 [
   {
     "University": {
-      "Main Work": [
-        "Create schemes",
-        "Calculate work"
-      ],
-      "Teacher Works": [
-        "Calculate stick",
-        "Pass jobs"
-      ]
+      "Main Work": {
+        "Calculate work": [
+          12
+        ]
+      },
+      "Teacher Works": {
+        "Pass jobs": [
+          10
+        ]
+      }
     },
     "Exams on Master": {
-      "Mathematics": [
-        "School math",
-        "Universitymath",
-        "Dicrete math",
-        "Math logic"
-      ],
-      "Algorithmks": [
-        "Stepik course",
-        "Lections"
-      ],
-      "Operating system": [
-        "Book"
-      ],
-      "PC science": [
-        "Book"
-      ],
-      "Programming language": []
+      "Mathematics": {
+        "Math logic": [
+          0
+        ]
+      },
+      "Algorithmks": {
+        "Lections": [
+          0
+        ]
+      },
+      "Operating system": {
+        "Book": [
+          0
+        ]
+      },
+      "PC science": {
+        "Book": [
+          0
+        ]
+      },
+      "Programming language": {}
     }
   }
 ]

@@ -2,6 +2,20 @@ class Task:
     def __init__(self, name):
         self.name = name
         self.subtasks = []
+        self.__progress = 0
+
+    @property
+    def progress_for_calculate(self):
+        return self.__progress
+
+    @property
+    def progress(self):
+        if not self.subtasks:
+            return 0
+        total = sum([p.progress_for_calculate for p in self.subtasks])
+        result = total / len(self.subtasks)
+        self.__progress = result
+        return f"\nProgress: {result}%"
 
     def __str__(self):
         return f"Task: {self.name}"

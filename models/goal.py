@@ -7,6 +7,14 @@ class Goal:
         self.tasks = []
         self.create_date = None
 
+    @property
+    def progress(self):
+        if not self.tasks:
+            return 0
+        total = sum([t.progress_for_calculate for t in self.tasks])
+        result = total / len(self.tasks)
+        return f"\nProgress: {result}%"
+
     def __str__(self):
         return f"Goal: {self.name}"
     
