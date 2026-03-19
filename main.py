@@ -5,18 +5,20 @@ from services.works_json import load_json, dump_json
 
 from common.distibution_goals import distribution_goals
 
+import pickle
+
 
 def main():
     """Main function of programm"""
     filename = "MyGoals.json"
-    
-    load_user_goals = load_json(filename)
 
-    user_goals = distribution_goals(load_user_goals)
+    with open("goals.pkl", 'rb') as f:
+        user_goals = pickle.load(f)
 
     user_choice(user_goals)
-    
-    dump_json(filename, user_goals)
+
+    with open("goals.pkl", 'wb') as f:
+        pickle.dump(user_goals, f)
         
 
 if __name__ == "__main__":
