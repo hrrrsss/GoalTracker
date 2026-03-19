@@ -1,95 +1,213 @@
 from tkinter import *
 from tkinter import ttk
-from models.goal import Goal  # твой класс Goal
-from models.task import Task  # твой класс Task
+from models.goal import Goal
+from models.task import Task
+from models.subtask import Subtask
 
-# Создаем окно
-root = Tk()
-root.title("GoalTracker")
-root.geometry("500x400")
+class GoalTrackerInterface:
+    def __init__(self, root, goals):
+        self.root = root
+        self.goals = goals
+        self.main_frame = Frame(root)
+        self.main_frame.pack(fill=BOTH, expand=True)
+        self.show_goals()
 
-# Вместо списка строк - список ОБЪЕКТОВ Goal
-goals = [
-    Goal("Выучить Python"),
-    Goal("Сделать проект"),
-    Goal("Найти работу")
-]
-
-# Добавим пару задач для первой цели
-goals[0].tasks.append(Task("Изучить основы"))
-goals[0].tasks.append(Task("Сделать мини-проект"))
-
-# Главный контейнер
-main_frame = Frame(root)
-main_frame.pack(fill=BOTH, expand=True)
-
-def show_goals():
-    """Показывает экран со списком целей"""
-    # Очищаем контейнер
-    for widget in main_frame.winfo_children():
-        widget.destroy()
     
-    # Заголовок
-    title = Label(main_frame, text="МОИ ЦЕЛИ", font=("Arial", 16))
-    title.pack(pady=10)
-    
-    # Кнопки целей - теперь goal это объект, а не строка
-    for goal in goals:
-        btn = Button(main_frame, 
-                    text=goal.name,  # берем name у объекта Goal
-                    font=("Arial", 12),
-                    width=30,
-                    command=lambda g=goal: show_tasks(g))  # передаем объект
-        btn.pack(pady=5)
-    
-    # Кнопка новой цели
-    btn_new = Button(main_frame, text="+ Новая цель", command=create_goal)
-    btn_new.pack(pady=20)
+    def create_goal(self):
+        dialog = Toplevel(self.root)
+        dialog.title("New Goal")
+        dialog.geometry("300x150")
+        dialog.resizable(False, False)
 
-def show_tasks(goal):
-    """Показывает экран с задачами выбранной цели"""
-    # Очищаем контейнер
-    for widget in main_frame.winfo_children():
-        widget.destroy()
+        Label(dialog, text="Goal name:", font=("Arial", 10)).pack(pady=5)
+        entry = Entry(dialog, width=30, font=("Arial", 10))
+        entry.pack(padx=10, pady=5)
+        entry.focus()
+
+        def save():
+            name = entry.get().strip()
+            if name:
+                new_goal = Goal(name)
+                self.goals.append(new_goal)
+                dialog.destroy()
+                self.show_goals()
+            else:
+                Label(dialog, text="Name cannot be empty!", fg="red").pack()
+        
+        btn_frame = Frame(dialog)
+        btn_frame.pack(pady=10)
+
+        Button(btn_frame, text="Save", command=save, width=10).pack(side=LEFT, padx=5)
+        Button(btn_frame, text="Cancel", command=dialog.destroy, width=10).pack(side=LEFT)
+
+
+    def create_task(self, goal):
+        dialog = Toplevel(self.root)
+        dialog.title("New Task")
+        dialog.geometry("300x150")
+        dialog.resizable(False, False)
+        
+        Label(dialog, text=f"Task for: {goal.name}", font=("Arial", 10)).pack(pady=5)
+        Label(dialog, text="Task name:", font=("Arial", 10)).pack()
+        
+        entry = Entry(dialog, width=30, font=("Arial", 10))
+        entry.pack(padx=10, pady=5)
+        entry.focus()
+        
+        def save():
+            name = entry.get().strip()
+            if name:
+                new_task = Task(name)
+                goal.tasks.append(new_task)
+                dialog.destroy()
+                self.show_tasks(goal)
+        
+        btn_frame = Frame(dialog)
+        btn_frame.pack(pady=10)
+        
+        Button(btn_frame, text="Save", command=save, width=10).pack(side=LEFT, padx=5)
+        Button(btn_frame, text="Cancel", command=dialog.destroy, width=10).pack(side=LEFT)
+
+
+    def create_subtask(self, task):
+        dialog = Toplevel(self.root)
+        dialog.title("New Task")
+        dialog.geometry("300x150")
+        dialog.resizable(False, False)
+        
+        Label(dialog, text=f"Subtask for: {task.name}", font=("Arial", 10)).pack(pady=5)
+        Label(dialog, text="Subtask name:", font=("Arial", 10)).pack()
+        
+        entry = Entry(dialog, width=30, font=("Arial", 10))
+        entry.pack(padx=10, pady=5)
+        entry.focus()
+        
+        def save():
+            name = entry.get().strip()
+            if name:
+                new_subtask = Subtask(name)
+                task.subtasks.append(new_subtask)
+                dialog.destroy()
+                self.show_subtasks(task)
+        
+        btn_frame = Frame(dialog)
+        btn_frame.pack(pady=10)
+        
+        Button(btn_frame, text="Save", command=save, width=10).pack(side=LEFT, padx=5)
+        Button(btn_frame, text="Cancel", command=dialog.destroy, width=10).pack(side=LEFT)
+        
     
-    # Заголовок с названием цели
-    title = Label(main_frame, text=f"ЦЕЛЬ: {goal.name}", font=("Arial", 16))
-    title.pack(pady=10)
+    def show_goals(self):
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
+        
+        Label(self.main_frame, text="My Goals", font=("Arial", 16)).pack(pady=10)
+
+        goals_frame = Frame(self.main_frame)
+        goals_frame.pack(expand=True, fill=BOTH, pady=20)
+
+        if self.goals:
+        
+            buttons_frame = Frame(goals_frame)
+            buttons_frame.pack(expand=True)
+
+            for goal in self.goals:
+                btn = Button(buttons_frame,
+                            text=goal.name,
+                            font=("Arial", 14),
+                            width=20,
+                            height=2,
+                            command=lambda g=goal: self.show_tasks(g))
+                btn.pack(pady=10)
+        else:
+            info = Label(self.goals_frame, text="Goals empties", font=("Arial", 14)).pack(expand=True)
+
+        btn_new = Button(self.main_frame, 
+                         text="+ New goal", 
+                         font=("Arial", 12),
+                         width=15,
+                         command=lambda: self.create_goal())
+        btn_new.pack()
+
     
-    # Если есть задачи - показываем их
-    if goal.tasks:
-        for task in goal.tasks:
-            btn = Button(main_frame,
-                        text=task.name,
+    def show_tasks(self, goal):
+        self.current_goal = goal
+
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
+
+        Label(self.main_frame, text="My Tasks", font=("Arial", 16)).pack(pady=10)
+
+        tasks_frame = Frame(self.main_frame)
+        tasks_frame.pack(expand=True, fill=BOTH, pady=20)
+
+        if goal.tasks:
+            buttons_frame = Frame(tasks_frame)
+            buttons_frame.pack(expand=True)
+            
+            for task in goal.tasks:
+                btn = Button(buttons_frame,
+                            text=task.name,
+                            font=("Arial", 14),
+                            width=20,
+                            height=2,
+                            command=lambda t=task: self.show_subtasks(t))
+                btn.pack(pady=10)
+        else:
+            info = Label(tasks_frame, text="No tasks yet", font=("Arial", 12))
+            info.pack(expand=True)
+
+        control_frame = Frame(self.main_frame)
+        control_frame.pack(side=BOTTOM, pady=20)
+
+        btn_new = Button(control_frame, text="+ New task", 
                         font=("Arial", 12),
-                        width=30)
-            btn.pack(pady=5)
-    else:
-        # Если задач нет
-        info = Label(main_frame, text="Нет задач", font=("Arial", 12))
-        info.pack(pady=20)
-    
-    # Кнопка новой задачи
-    btn_new = Button(main_frame, text="+ Новая задача", 
-                    command=lambda: create_task(goal))
-    btn_new.pack(pady=10)
-    
-    # Кнопка "Назад"
-    back_btn = Button(main_frame, text="← Назад к целям", command=show_goals)
-    back_btn.pack(pady=10)
+                        width=15,
+                        command=lambda: self.create_task(goal))
+        btn_new.pack(pady=5)
 
-def create_goal():
-    """Создает новую цель (пока просто тест)"""
-    new_goal = Goal("Новая цель")
-    goals.append(new_goal)
-    show_goals()  # обновляем экран
+        back_btn = Button(control_frame, text="← Back to goals", 
+                        font=("Arial", 12),
+                        width=15,
+                        command=self.show_goals)
+        back_btn.pack(pady=5)
 
-def create_task(goal):
-    """Создает новую задачу для цели"""
-    new_task = Task("Новая задача")
-    goal.tasks.append(new_task)
-    show_tasks(goal)  # обновляем экран
 
-# Запускаем
-show_goals()
-root.mainloop()
+    def show_subtasks(self, task):
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
+
+        Label(self.main_frame, text="My Subtasks", font=("Arial", 16)).pack(pady=10)
+
+        subtasks_frame = Frame(self.main_frame)
+        subtasks_frame.pack(expand=True, fill=BOTH, pady=20)
+
+        if task.subtasks:
+            buttons_frame = Frame(subtasks_frame)
+            buttons_frame.pack(expand=True)
+            
+            for subtask in task.subtasks:
+                btn = Button(buttons_frame,
+                            text=subtask.name,
+                            font=("Arial", 14),
+                            width=20,
+                            height=2)
+                btn.pack(pady=10)
+        else:
+            info = Label(subtasks_frame, text="No subtasks yet", font=("Arial", 12))
+            info.pack(expand=True)
+
+        control_frame = Frame(self.main_frame)
+        control_frame.pack(side=BOTTOM, pady=20)
+
+        btn_new = Button(control_frame, text="+ New Subtask", 
+                        font=("Arial", 12),
+                        width=15,
+                        command=lambda: self.create_subtask(task))
+        btn_new.pack(pady=5)
+
+        back_btn = Button(control_frame, text="← Back to tasks", 
+                        font=("Arial", 12),
+                        width=15,
+                        command=lambda: self.show_tasks(self.current_goal))
+        back_btn.pack(pady=5)

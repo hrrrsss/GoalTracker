@@ -1,24 +1,26 @@
-from functions.first import user_choice
+from tkinter import Tk
+from inteface import GoalTrackerInterface
+from common.load_dump_pickle import load, dump
 
-from models.goal import Goal
-from services.works_json import load_json, dump_json
-
-from common.distibution_goals import distribution_goals
-
-import pickle
 
 
 def main():
     """Main function of programm"""
-    filename = "MyGoals.json"
+    filename = "goals.pkl"
+    user_goals = load(filename)
 
-    with open("goals.pkl", 'rb') as f:
-        user_goals = pickle.load(f)
+    root = Tk()
+    root.title("GoalTracker")
+    root.geometry("900x700")
 
-    user_choice(user_goals)
+    app = GoalTrackerInterface(root, user_goals)
 
-    with open("goals.pkl", 'wb') as f:
-        pickle.dump(user_goals, f)
+    root.mainloop()
+
+    
+    dump(filename, user_goals)
+
+
         
 
 if __name__ == "__main__":
